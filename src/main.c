@@ -153,7 +153,8 @@ static void init_dri_cards()
 
 	dp = opendir(DRI_PATH);
 	if (dp == NULL) {
-		fprintf(stderr, "Opening %s failed: %s\n", DRI_PATH, strerror(errno));
+		fprintf(stderr, "Opening %s failed: %s\n", DRI_PATH,
+			strerror(errno));
 		return;
 	}
 
