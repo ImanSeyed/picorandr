@@ -84,6 +84,8 @@ static void drm_lookup_connectors(struct dri_card *card)
 
 		drmModeFreeConnector(conn);
 	}
+
+	drmModeFreeResources(resources);
 }
 
 static void get_pci_info(const struct dri_card *card)
