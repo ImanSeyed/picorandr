@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <fcntl.h>
+#include <errno.h>
 #include <dirent.h>
 #include <stdlib.h>
 #include <string.h>
@@ -152,7 +153,7 @@ static void init_dri_cards()
 
 	dp = opendir(DRI_PATH);
 	if (dp == NULL) {
-		perror("opendir");
+		fprintf(stderr, "Opening %s failed: %s\n", DRI_PATH, strerror(errno));
 		return;
 	}
 
