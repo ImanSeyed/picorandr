@@ -163,8 +163,9 @@ static void init_dri_cards()
 			card->pci_address = malloc(strlen(entry->d_name) + 1);
 
 			extract_pci_address(card->pci_address, entry->d_name);
-			sprintf(card->devtmpfs_path, "%s/%s", DRI_PATH,
-				entry->d_name);
+			snprintf(card->devtmpfs_path,
+				 sizeof(card->devtmpfs_path), "%s/%s", DRI_PATH,
+				 entry->d_name);
 
 			list_add_tail(&card->list, &dri_cards_list);
 		}
