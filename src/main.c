@@ -64,10 +64,15 @@ static int ends_with(const char *str, const char *suffix)
 	return strncmp(str + len_str - len_suffix, suffix, len_suffix) == 0;
 }
 
-static void drm_lookup_connectors(struct dri_card *card)
+static void drm_lookup_connectors(const struct dri_card *card)
 {
 	int drm_fd = open(card->devtmpfs_path, O_RDWR | O_NONBLOCK);
 	drmModeRes *resources = drmModeGetResources(drm_fd);
+	if (!resources) {
+		fprintf(stderr, "%s: Couldn't get DRM resources.",
+			card->pci_address);
+		return;
+	}
 
 	for (int i = 0; i < resources->count_connectors; ++i) {
 		drmModeConnector *conn =
