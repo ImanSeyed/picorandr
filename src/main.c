@@ -74,17 +74,18 @@ static void drm_lookup_connectors(const struct dri_card *card)
 		return;
 	}
 
+	printf("\t  Connectors:\n");
 	for (int i = 0; i < resources->count_connectors; ++i) {
 		drmModeConnector *conn =
 			drmModeGetConnector(drm_fd, resources->connectors[i]);
 		if (!conn)
 			continue;
 
-		printf("\t%s-%u (%s)\n", conn_type[conn->connector_type],
+		printf("\t\t  %s-%u (%s)\n", conn_type[conn->connector_type],
 		       conn->connector_type_id, conn_mode[conn->connection]);
 
 		if (conn->modes)
-			printf("\t\t* %ux%u\n", conn->modes->hdisplay,
+			printf("\t\t\t  * %ux%u\n", conn->modes->hdisplay,
 			       conn->modes->vdisplay);
 
 		drmModeFreeConnector(conn);
@@ -98,6 +99,7 @@ static void get_pci_info(const struct dri_card *card)
 	uint8_t bus, device, func;
 	struct pci_access *pacc;
 	struct pci_dev *dev;
+	const char *driver;
 	char devbuf[1024];
 	int domain;
 
@@ -115,14 +117,21 @@ static void get_pci_info(const struct dri_card *card)
 	for (dev = pacc->devices; dev; dev = dev->next) {
 		if (dev->domain == domain && dev->bus == bus &&
 		    dev->dev == device && dev->func == func) {
-			pci_fill_info(dev, PCI_FILL_IDENT | PCI_FILL_BASES);
+			pci_fill_info(dev, PCI_FILL_IDENT | PCI_FILL_BASES |
+						   PCI_FILL_DRIVER);
 
 			pci_lookup_name(pacc, devbuf, sizeof(devbuf),
 					PCI_LOOKUP_VENDOR | PCI_LOOKUP_DEVICE,
 					dev->vendor_id, dev->device_id);
 
-			printf("%s (%04x:%04x)\n", devbuf, dev->vendor_id,
-			       dev->device_id);
+			printf("%04x:%04x %s\n", dev->vendor_id, dev->device_id,
+			       devbuf);
+
+			driver = pci_get_string_property(dev, PCI_FILL_DRIVER);
+			if (driver)
+				printf("\t  Kernel driver in use: %s\n",
+				       driver);
+
 			goto out;
 		}
 	}
@@ -204,6 +213,7 @@ int main()
 	{
 		get_pci_info(card);
 		drm_lookup_connectors(card);
+		printf("\n");
 	}
 
 	destroy_dri_cards();
