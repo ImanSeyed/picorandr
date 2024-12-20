@@ -11,6 +11,11 @@ int main()
 
 	dri_cards_list = init_dri_cards();
 
+	if (!dri_cards_list) {
+		printf("No DRI card detected.\n");
+		return 0;
+	}
+
 	list_for_each_entry(card, dri_cards_list, list)
 	{
 		get_pci_info(card);
