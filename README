@@ -6,19 +6,35 @@ driver scheme.
 
 BUILDING:
 
-        cmake -B build;
-        make -C build;
+        $ cmake -B build; make -C build;
 
 INSTALL:
 
-        sudo make -C build install;
+        $ sudo make -C build install;
 
 CONTRIBUTION:
 
         For contributions to development, please run the command below before
 	creating a PR:
 
-        clang-format -i --style=file src/* include/*;
+        $ clang-format -i --style=file src/* include/*;
+
+EXAMPLE:
+	$ picorandr;
+	8086:9a49 Intel Corporation TigerLake-LP GT2 [Iris Xe Graphics]
+	          Kernel driver in use: i915
+	          Connectors:
+	                  eDP-1 (connected)
+	                          * 1920x1080
+	                  DP-1 (disconnected)
+	                  DP-2 (disconnected)
+	                  HDMI-1 (disconnected)
+	
+	10de:2520 NVIDIA Corporation GA106M [GeForce RTX 3060 Mobile / Max-Q]
+	          Kernel driver in use: nvidia
+	          Connectors:
+	                  HDMI-2 (connected)
+	                          * 1920x1080
 
 Note 1: If you're using an NVIDIA GPU and want the program to work properly,
 ensure that the nvidia_drm module is loaded first.
