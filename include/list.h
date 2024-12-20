@@ -6,8 +6,8 @@
 #ifndef __LIST_H
 #define __LIST_H
 
-#define offset_of(type, field)		__builtin_offsetof(type, field)
-#define container_of(p, type, field)	(type *)((long)p - offset_of(type, field))
+#define offset_of(type, field) __builtin_offsetof(type, field)
+#define container_of(p, type, field) (type *)((long)p - offset_of(type, field))
 
 struct list_head {
 	struct list_head *next;
@@ -54,15 +54,15 @@ static inline int list_empty(struct list_head *list)
 	return list->next == list;
 }
 
-#define list_for_each_entry(p, list, field)		\
-	for (p = container_of((list)->next, typeof(*p), field);	\
-	     &(p)->field != list;				\
+#define list_for_each_entry(p, list, field)                     \
+	for (p = container_of((list)->next, typeof(*p), field); \
+	     &(p)->field != list;                               \
 	     p = container_of((p)->field.next, typeof(*p), field))
 
-#define list_for_each_entry_safe(p, n, list, field)			\
-	for (p = container_of((list)->next, typeof(*p), field),		\
-		     n = container_of((p)->field.next, typeof(*p), field); \
-	     &(p)->field != list;					\
+#define list_for_each_entry_safe(p, n, list, field)               \
+	for (p = container_of((list)->next, typeof(*p), field),   \
+	    n = container_of((p)->field.next, typeof(*p), field); \
+	     &(p)->field != list;                                 \
 	     p = n, n = container_of((p)->field.next, typeof(*p), field))
 
 #endif /* __LIST_H */
