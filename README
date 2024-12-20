@@ -6,6 +6,9 @@ driver scheme.
 
 BUILDING:
 
+	Install the *libpci* and *libdrm* libraries, including their header files,
+	if they are not already installed. Next, build the project as shown below:
+
         $ cmake -B build; make -C build;
 
 INSTALL:
