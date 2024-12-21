@@ -6,10 +6,11 @@
 
 #include "drm_misc.h"
 
-void get_pci_info(const struct dri_card *card)
+void get_pci_info(struct dri_card *card)
 {
 	uint8_t bus, device, func;
 	struct pci_access *pacc;
+	size_t driver_name_len;
 	struct pci_dev *dev;
 	const char *driver;
 	char devbuf[1024];
@@ -40,9 +41,14 @@ void get_pci_info(const struct dri_card *card)
 			       devbuf);
 
 			driver = pci_get_string_property(dev, PCI_FILL_DRIVER);
-			if (driver)
+			if (driver) {
+				driver_name_len = strlen(driver) + 1;
+				card->driver_name = calloc(1, driver_name_len);
+
+				strcpy(card->driver_name, driver);
 				printf("\t  Kernel driver in use: %s\n",
 				       driver);
+			}
 
 			goto out;
 		}
