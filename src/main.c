@@ -3,6 +3,7 @@
 #include "list.h"
 #include "drm_misc.h"
 #include "pci_misc.h"
+#include "klog_misc.h"
 
 int main()
 {
@@ -20,6 +21,8 @@ int main()
 	{
 		get_pci_info(card);
 		drm_lookup_connectors(card);
+		if (card->driver_name)
+			klog_driver(card->driver_name);
 		printf("\n");
 	}
 

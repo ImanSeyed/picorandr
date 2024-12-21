@@ -8,6 +8,7 @@
 
 struct dri_card {
 	char *pci_address;
+	char *driver_name;
 	char devtmpfs_path[PATH_MAX];
 	struct list_head list;
 };
