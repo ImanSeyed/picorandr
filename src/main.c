@@ -1,16 +1,30 @@
 #include <stdio.h>
+#include <getopt.h>
 
 #include "list.h"
 #include "drm_misc.h"
 #include "pci_misc.h"
 #include "klog_misc.h"
 
-int main()
+/* OPTIONS */
+
+static int opt_klog;
+
+int main(int argc, char **argv)
 {
 	struct list_head *dri_cards_list;
 	struct dri_card *card;
+	int opt;
 
 	dri_cards_list = init_dri_cards();
+
+	while ((opt = getopt(argc, argv, "k")) != -1) {
+		switch (opt) {
+		case 'k':
+			opt_klog = 1;
+			break;
+		}
+	}
 
 	if (!dri_cards_list) {
 		printf("No DRI card detected.\n");
@@ -21,7 +35,7 @@ int main()
 	{
 		get_pci_info(card);
 		drm_lookup_connectors(card);
-		if (card->driver_name)
+		if (opt_klog && card->driver_name)
 			klog_driver(card->driver_name);
 		printf("\n");
 	}
