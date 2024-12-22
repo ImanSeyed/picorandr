@@ -16,8 +16,6 @@ int main(int argc, char **argv)
 	struct dri_card *card;
 	int opt;
 
-	dri_cards_list = init_dri_cards();
-
 	while ((opt = getopt(argc, argv, "k")) != -1) {
 		switch (opt) {
 		case 'k':
@@ -25,6 +23,8 @@ int main(int argc, char **argv)
 			break;
 		}
 	}
+
+	dri_cards_list = init_dri_cards();
 
 	if (!dri_cards_list) {
 		printf("No DRI card detected.\n");
