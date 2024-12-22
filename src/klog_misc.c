@@ -21,7 +21,7 @@ void klog_driver(const char *driver_name)
 	length = klogctl(3, klog_buff, klog_size);
 	if (length == -1) {
 		perror("klog");
-		return;
+		goto out;
 	}
 
 	curr_line = klog_buff;
@@ -42,5 +42,6 @@ void klog_driver(const char *driver_name)
 		curr_line = next_line ? (next_line + 1) : NULL;
 	}
 
+out:
 	free(klog_buff);
 }
