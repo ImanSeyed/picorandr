@@ -6,8 +6,6 @@
 #include <sys/syscall.h>
 #include <sys/syslog.h>
 
-#define LOG_BUF_SIZE 4096
-
 void klog_driver(const char *driver_name)
 {
 	int length;
