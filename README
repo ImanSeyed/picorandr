@@ -23,6 +23,8 @@ CONTRIBUTION:
         $ clang-format -i --style=file src/* include/*;
 
 EXAMPLE:
+	To get a brief output, run the following command:
+
 	$ picorandr;
 	8086:9a49 Intel Corporation TigerLake-LP GT2 [Iris Xe Graphics]
 	          Kernel driver in use: i915
@@ -38,6 +40,35 @@ EXAMPLE:
 	          Connectors:
 	                  HDMI-2 (connected)
 	                          * 1920x1080
+	
+	For detailed Linux kernel logs specific to each GPU driver, execute the
+	command below:
+
+	$ picorandr -k
+	8086:9a49 Intel Corporation TigerLake-LP GT2 [Iris Xe Graphics]
+	          Kernel driver in use: i915
+	          Connectors:
+	                  eDP-1 (connected)
+	                          * 1920x1080
+	                  DP-1 (disconnected)
+	                  DP-2 (disconnected)
+	                  HDMI-1 (disconnected)
+	<6>[    0.383587] i915 0000:00:02.0: [drm] Found TIGERLAKE/UY (device ID 9a49) display version 12.00 stepping C0
+	<6>[    0.383997] i915 0000:00:02.0: [drm] VT-d active for gfx access
+	<6>[    0.384000] i915 0000:00:02.0: vgaarb: deactivate vga console
+	<5>[    0.384031] i915 0000:00:02.0: [drm] Transparent Hugepage support is recommended for optimal performance on this platform!
+	[...]
+	
+	10de:2520 NVIDIA Corporation GA106M [GeForce RTX 3060 Mobile / Max-Q]
+	          Kernel driver in use: nvidia
+	          Connectors:
+	                  HDMI-2 (disconnected)
+	<4>[    1.027168] nvidia: loading out-of-tree module taints kernel.
+	<4>[    1.027180] nvidia: module license 'NVIDIA' taints kernel.
+	<4>[    1.027186] nvidia: module license taints kernel.
+	<6>[    1.231402] nvidia-nvlink: Nvlink Core is being initialized, major device number 243
+	[...]
+
 
 Note 1: If you're using an NVIDIA GPU and want the program to work properly,
 ensure that the nvidia_drm module is loaded first.
