@@ -16,6 +16,11 @@ void klog_driver(const char *driver_name)
 
 	klog_size = klogctl(10, NULL, 0);
 	klog_buff = calloc(1, klog_size);
+	if (!klog_buff) {
+		perror("failed to allocate memory for klog buffer");
+		goto out;
+	}
+
 	length = klogctl(3, klog_buff, klog_size);
 	if (length == -1) {
 		perror("klog");

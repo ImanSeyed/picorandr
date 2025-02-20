@@ -45,7 +45,8 @@ void get_pci_info(struct dri_card *card)
 				driver_name_len = strlen(driver) + 1;
 				card->driver_name = calloc(1, driver_name_len);
 
-				strcpy(card->driver_name, driver);
+				strncpy(card->driver_name, driver,
+					driver_name_len);
 				printf("\t  Kernel driver in use: %s\n",
 				       driver);
 			}
@@ -60,18 +61,24 @@ out:
 	pci_cleanup(pacc);
 }
 
-void extract_pci_address(char *address, const char *pci_card_path)
+void extract_pci_address(char *address, const char *pci_card_path,
+			 size_t address_len)
 {
 	char *tmp, *pos;
+	size_t path_len;
 
-	tmp = calloc(strlen(pci_card_path) + 1, sizeof(char));
-	strcpy(tmp, pci_card_path);
+	path_len = strlen(pci_card_path) + 1;
+	tmp = calloc(path_len, sizeof(char));
+	if (!tmp)
+		return;
+
+	strncpy(tmp, pci_card_path, path_len);
 
 	pos = strtok(tmp, "-");
 
 	if (pos != NULL) {
 		pos = strtok(NULL, "-");
-		strcpy(address, pos);
+		strncpy(address, pos, address_len);
 	}
 
 	free(tmp);

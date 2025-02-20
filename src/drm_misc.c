@@ -96,27 +96,39 @@ void drm_lookup_connectors(const struct dri_card *card)
 struct list_head *init_dri_cards()
 {
 	struct list_head *dri_cards_list;
+	size_t pci_address_len;
 	struct dri_card *card;
 	struct dirent *entry;
 	DIR *dp;
 
 	dp = opendir(DRI_PATH);
+	dri_cards_list = NULL;
+
 	if (dp == NULL) {
 		fprintf(stderr, "Opening %s failed: %s\n", DRI_PATH,
 			strerror(errno));
-		dri_cards_list = NULL;
 		goto out;
 	}
 
 	dri_cards_list = malloc(sizeof(*dri_cards_list));
+	if (!dri_cards_list)
+		goto out;
+
 	list_head_init(dri_cards_list);
 
 	while ((entry = readdir(dp))) {
 		if (ends_with(entry->d_name, "-card")) {
+			pci_address_len = strlen(entry->d_name) + 1;
 			card = calloc(1, sizeof(*card));
-			card->pci_address = malloc(strlen(entry->d_name) + 1);
+			if (!card)
+				goto out;
 
-			extract_pci_address(card->pci_address, entry->d_name);
+			card->pci_address = malloc(pci_address_len);
+			if (!card->pci_address)
+				goto out;
+
+			extract_pci_address(card->pci_address, entry->d_name,
+					    pci_address_len);
 			snprintf(card->devtmpfs_path,
 				 sizeof(card->devtmpfs_path), "%s/%s", DRI_PATH,
 				 entry->d_name);
